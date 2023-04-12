@@ -71,7 +71,7 @@ service:
 
 ingress:
   # -- Enable this to use an Ingress to reach the Zulip service.
-  enabled: false
+  enabled: true
   # -- Can be used to add custom Ingress annotations.
   annotations:
     {}
@@ -80,17 +80,17 @@ ingress:
   hosts:
     # -- Host for the Ingress. Should be the same as
     # `zulip.environment.SETTING_EXTERNAL_HOST`.
-    - host: zulip.example.com
+    - host: chat.domain.com
       # -- Serves Zulip root of the chosen host domain.
       paths:
         - path: /
   # -- Set a specific secret to read the TLS certificate from. If you use
   # cert-manager, it will save the TLS secret here. If you do not, you need to
   # manually create a secret with your TLS certificate.
-  tls: []
-  #  - secretName: chart-example-tls
-  #    hosts:
-  #      - zulip.example.com
+  tls: 
+    - secretName: chart-example-tls
+      hosts:
+        - "*.domain.com"
 
 resources:
   {}
@@ -129,7 +129,7 @@ zulip:
     # manages the client-facing SSL certs.
     SSL_CERTIFICATE_GENERATION: self-signed
     # -- Domain Zulip is hosted on.
-    SETTING_EXTERNAL_HOST: zulip.example.com
+    SETTING_EXTERNAL_HOST: chat.domain.com
     # -- SMTP email password.
     SECRETS_email_password: "123456789"
     SETTING_ZULIP_ADMINISTRATOR: "admin@example.com"
@@ -146,6 +146,7 @@ zulip:
     accessMode: ReadWriteOnce
     size: 10Gi
     # existingClaim: "" # Use an already existing PVC
+    storageClass: ""
 
 # -- Liveness probe values.
 # Ref: https://kubernetes.io/docs/concepts/workloads/pods/pod-lifecycle/#container-probes
